@@ -1,0 +1,43 @@
+{
+    "env":
+    {
+        "browser": true,
+        "es2021": true,
+        "node": true
+    },
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint"],
+    "root": true,
+    "rules":
+    {
+        "no-console": "warn",
+        "semi": ["error", "always"],
+        "curly": ["error", "multi-or-nest"],
+        "brace-style": ["error", "allman"],
+        "indent":
+        [
+            "error", 4,
+            {
+                "SwitchCase": 1,
+                "VariableDeclarator": 1,
+                "ignoredNodes":
+                [
+                    "PropertyDefinition[decorators]",
+                    "TSUnionType",
+                    "FunctionExpression[params]:has(Identifier[decorators])"
+                ]
+            }
+        ],
+        "template-curly-spacing": ["error", "always"],
+        "space-before-function-paren": ["error", "never"],
+        "no-unexpected-multiline": "off",
+        "quotes":
+        [
+            2, "single",
+            {
+                "avoidEscape": true
+            }
+        ]
+    }
+}
