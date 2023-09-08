@@ -1,6 +1,20 @@
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { Controller, Post, Body, UseGuards, UseInterceptors, UploadedFile, ParseIntPipe, Param, Patch, Delete, Query, Get } from '@nestjs/common';
+import {
+    Controller,
+    Post,
+    Body,
+    UseGuards,
+    UseInterceptors,
+    UploadedFile,
+    ParseIntPipe,
+    Param,
+    Patch,
+    Delete,
+    Query,
+    Get,
+    Res
+} from '@nestjs/common';
 
 import { AuthGuard } from '@/auth/auth.guard';
 import { AdminGuard } from '@/auth/admin.guard';
@@ -15,6 +29,8 @@ import { BlogService } from './blog.service';
 
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from '@/blog/dto/update-blog.dto';
+import {Response} from 'express';
+import {join} from 'path';
 
 @Controller('blog')
 @ApiTags('Blog')
@@ -131,5 +147,11 @@ export class BlogController
     public async searchInContentAndSummary(@Query('locale') locale: Locale, @Query('search') search: string, @Query('page') page: number, @Query('limit') limit: number)
     {
         return this.blogService.searchInContentAndSummary(locale, search, page, limit);
+    }
+
+    @Get('uploaded-image/:image')
+    public async getAvatar(@Param('folder') folder: string, @Param('image') image: string, @Res() res: Response)
+    {
+        return res.sendFile(join(__dirname, '..', '..', `uploads/thumbnail/${ image }`));
     }
 }

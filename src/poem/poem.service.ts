@@ -1,5 +1,5 @@
 import { Pool } from 'mysql2/promise';
-import { BadRequestException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 
 import { Locale } from '@/shared/enums';
 
@@ -12,19 +12,17 @@ export class PoemService
     )
     { }
 
-    public async findByID(id: string, api_token: string, locale: Locale)
+    public async findByID(request, id: string, api_token: string, locale: Locale)
     {
-        if (!api_token)
-            throw new BadRequestException({ statusCode: HttpStatus.BAD_REQUEST, message: 'Please put the token in query' });
-
         if (!Object.values(Locale)?.includes(locale))
             throw new BadRequestException({ statusCode: HttpStatus.BAD_REQUEST, message: 'Invalid Locale' });
 
         try
         {
             const [token] = await this.webDatabase.query('SELECT * FROM poem_token WHERE token = ?', [api_token]);
+            const [whiteDomain] = await this.webDatabase.query('SELECT domain FROM white_domain WHERE domain = ?', [request.get('origin')]);
 
-            if (!token[0])
+            if (!token[0] && !whiteDomain[0])
                 return { statusCode: HttpStatus.BAD_REQUEST, message: 'Invalid Token' };
 
             const [words] = await this.webDatabase.query(`SELECT words FROM poem_words WHERE id = ${ id }`);
@@ -41,17 +39,15 @@ export class PoemService
         }
     }
 
-    public async findAllAndOrder(locale: Locale, api_token: string, page = 1, limit = 20)
+    public async findAll(request, locale: Locale, api_token: string, page = 1, limit = 20)
     {
-        if (!api_token)
-            throw new BadRequestException({ statusCode: HttpStatus.BAD_REQUEST, message: 'Please put the token in query' });
-
         if (!Object.values(Locale)?.includes(locale))
             throw new BadRequestException({ statusCode: HttpStatus.BAD_REQUEST, message: 'Invalid Locale' });
 
         const [token] = await this.webDatabase.query('SELECT * FROM poem_token WHERE token = ?', [api_token]);
+        const [whiteDomain] = await this.webDatabase.query('SELECT domain FROM white_domain WHERE domain = ?', [request.get('origin')]);
 
-        if (!token[0])
+        if (!token[0] && !whiteDomain[0])
             return { statusCode: HttpStatus.BAD_REQUEST, message: 'Invalid Token' };
 
         const [poems] = await this.webDatabase.query(`SELECT id, content FROM poem_content ORDER BY id ASC LIMIT ${ page - 1 }, ${ limit };`);
@@ -60,17 +56,15 @@ export class PoemService
         return { statusCode: HttpStatus.OK, data: { ...poemsCount[0], hasMore: Number(page) < Math.ceil(poemsCount[0].totals / Number(limit)), poems }};
     }
 
-    public async searchInContent(locale: Locale, api_token: string, search: string, page = 1, limit = 20)
+    public async searchInContent(request, locale: Locale, api_token: string, search: string, page = 1, limit = 20)
     {
-        if (!api_token)
-            throw new BadRequestException({ statusCode: HttpStatus.BAD_REQUEST, message: 'Please put the token in query' });
-
         if (!Object.values(Locale)?.includes(locale))
             throw new BadRequestException({ statusCode: HttpStatus.BAD_REQUEST, message: 'Invalid Locale' });
 
         const [token] = await this.webDatabase.query('SELECT * FROM poem_token WHERE token = ?', [api_token]);
+        const [whiteDomain] = await this.webDatabase.query('SELECT domain FROM white_domain WHERE domain = ?', [request.get('origin')]);
 
-        if (!token[0])
+        if (!token[0] && !whiteDomain[0])
             return { statusCode: HttpStatus.BAD_REQUEST, message: 'Invalid Token' };
 
         const [poems] = await this.webDatabase.query(`SELECT id, content FROM poem_content WHERE content LIKE '%${ search }%' LIMIT ${ page - 1 }, ${ limit }`);
