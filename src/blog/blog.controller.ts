@@ -137,7 +137,7 @@ export class BlogController
         return this.blogService.findBySlug(slug, accountID, locale);
     }
 
-    @Get('/find-all-and-order/type/:type')
+    @Get('/find-all-and-order/:type')
     public async findAllAndOrder(@Query('locale') locale: Locale, @Param('type') type: BlogFindAll, @Query('page') page: number, @Query('limit') limit: number)
     {
         return this.blogService.findAllAndOrder(locale, type, page, limit);

@@ -245,10 +245,13 @@ export class BlogService
                     (SELECT COUNT(blog_reads.blog_id) FROM blog_reads WHERE blog.id = blog_reads.blog_id) AS readz,
                     (SELECT COUNT(comments.blog_id) FROM comments WHERE blog.id = comments.blog_id) AS comments,
                     (SELECT avatar FROM account_information WHERE account_information.id = blog.account) AS avatar,
+                    (SELECT first_name FROM account_information WHERE account_information.id = blog.account) AS first_name,
+                    (SELECT last_name FROM account_information WHERE account_information.id = blog.account) AS last_name,
                     id, account,
                     title_${ locale }, meta_title_${ locale },
                     slug,
                     thumbnail,
+                    to_read,
                     summary_${ locale }, content_${ locale },
                     published, published_at, created_at, updated_at
                 FROM
@@ -294,10 +297,14 @@ export class BlogService
                 (SELECT COUNT(likes.blog_id) FROM likes WHERE blog.id = likes.blog_id) AS likes,
                 (SELECT COUNT(blog_reads.blog_id) FROM blog_reads WHERE blog.id = blog_reads.blog_id) AS readz,
                 (SELECT COUNT(comments.blog_id) FROM comments WHERE blog.id = comments.blog_id) AS comments,
+                (SELECT avatar FROM account_information WHERE account_information.id = blog.account) AS avatar,
+                (SELECT first_name FROM account_information WHERE account_information.id = blog.account) AS first_name,
+                (SELECT last_name FROM account_information WHERE account_information.id = blog.account) AS last_name,
                 id,
                 title_${ locale }, meta_title_${ locale },
                 slug,
                 thumbnail,
+                to_read,
                 summary_${ locale },
                 published, published_at
             FROM
