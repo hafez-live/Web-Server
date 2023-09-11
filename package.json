@@ -1,9 +1,12 @@
 {
-    "name": "hafex-hub-server",
-    "version": "0.0.1",
+    "name": "hafex-live-server",
+    "version": "1.0.0",
     "description": "",
-    "private": true,
-    "license": "UNLICENSED",
+    "author": {
+        "email": "contact@parsa-firoozi.ir",
+        "name": "im-parsa",
+        "url": "https://parsa-firoozi.ir/"
+    },
     "scripts": {
         "build": "nest build",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

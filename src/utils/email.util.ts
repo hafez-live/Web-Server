@@ -66,6 +66,6 @@ export class Email
             <p>If you didn't forget your password, please ignore this email</p>
         `;
 
-        await this.send(template, 'Hafez-Hub Reset Password');
+        await this.send(template, 'Hafez Live Reset Password');
     }
 }

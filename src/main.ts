@@ -24,7 +24,7 @@ const transports =
             winston.format.colorize({ all: true, colors: { info: 'blue', debug: 'yellow', error: 'red' } }),
             winston.format.printf((info: winston.Logform.TransformableInfo) =>
             {
-                return `[Hafez-Hub] ${ info.timestamp } [${ info.level }] [${ info.context ? info.context : info.stack }] ${ info.message }`;
+                return `[Hafez Live] ${ info.timestamp } [${ info.level }] [${ info.context ? info.context : info.stack }] ${ info.message }`;
             })
         )
     }),
@@ -95,7 +95,7 @@ async function bootstrap(): Promise<void>
     );
 
     const config = new DocumentBuilder()
-        .setTitle('Hafez-Hub API')
+        .setTitle('Hafez Live API')
         .setVersion('1.0')
         .addBearerAuth({ type: 'http', scheme: 'bearer', description: 'Enter Access Token', in: 'header' }, 'JsonWebToken')
         .build();
