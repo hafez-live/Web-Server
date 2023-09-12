@@ -1,1 +1,0 @@
-# hafez-server
