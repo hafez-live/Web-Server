@@ -150,7 +150,7 @@ export class BlogController
     }
 
     @Get('uploaded-image/:image')
-    public async getAvatar(@Param('folder') folder: string, @Param('image') image: string, @Res() res: Response)
+    public async getAvatar(@Param('image') image: string, @Res() res: Response)
     {
         return res.sendFile(join(__dirname, '..', '..', `uploads/thumbnail/${ image }`));
     }
